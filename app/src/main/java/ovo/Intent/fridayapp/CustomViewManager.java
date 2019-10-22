@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 /**
@@ -18,7 +20,7 @@ public class CustomViewManager {
     //本類例項
     private static CustomViewManager instance;
     //自定義的FloatView
-    private FloatView mFloatView;
+    private View mFloatView;
     //視窗管理類
     private WindowManager mWindowManager;
 
@@ -52,7 +54,7 @@ public class CustomViewManager {
 
     private CustomViewManager(Context context) {
         this.mContext = context;
-        mFloatView = new FloatView(mContext);
+        mFloatView = getFloatView2(mContext);
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         mFloatView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +72,15 @@ public class CustomViewManager {
             }
         });
     }
+
+    private View getFloatView2(Context context){
+        return new FloatView2().getView(context);
+    }
+
+    private FloatView getFloatView(Context context){
+        return new FloatView(context);
+    }
+
     /**
      * @param
      * @description 通過單例模式獲取例項物件
@@ -94,12 +105,12 @@ public class CustomViewManager {
      */
     public void showFloatViewOnWindow() {
         WindowManager.LayoutParams parmas = new WindowManager.LayoutParams();
-        parmas.width = mFloatView.getFloatWidth();
-        parmas.height = mFloatView.getFloatHeight();
+        parmas.width = FloatView.floatWidth;
+        parmas.height = FloatView.floatHeight;
 //視窗圖案放置位置
         parmas.gravity = Gravity.LEFT | Gravity.CENTER;
 // 如果忽略gravity屬性，那麼它表示視窗的絕對X位置。
-        parmas.x = 0;
+        parmas.x = 20;
 //如果忽略gravity屬性，那麼它表示視窗的絕對Y位置。
         parmas.y = 0;
 ////電話視窗。它用於電話互動（特別是呼入）。它置於所有應用程式之上，狀態列之下。

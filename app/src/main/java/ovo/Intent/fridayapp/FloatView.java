@@ -9,9 +9,9 @@ import android.view.View;
 
 public class FloatView extends View {
     //懸浮球寬度
-    private int floatWidth = 150;
+    public static int floatWidth = 300;
     //懸浮球高度
-    private int floatHeight = 150;
+    public static  int floatHeight = 250;
     //懸浮球畫筆
     private Paint mPaint;
     //繪製文字畫筆
