@@ -2,66 +2,47 @@ package ovo.Intent.fridayapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+
+/**
+ * https://www.jianshu.com/p/529755edc3c5
+ */
 public class MainActivity extends AppCompatActivity {
      final String TAG = MainActivity.class.getSimpleName();
     public static final String callFriDayAction = "com.friday.tvapp";
     public static final String callFriDayPackageName = "net.fetnet.fetvod.tv";
     public static final String callFriDayMainClass = ".MainActivity";
-    public static final String POSTER = "poster";
-    public static final String ACTION = "action";
-    public static final int ActionPlay=1;
-    public static final String Json = "{" +
-            "                \"contentId\": 970,\n" +
-            "                \"contentType\": 2,\n" +
-            "                \"chineseName\": \"優雅的家\",\n" +
-            "                \"englishName\": \"우아한 가\",\n" +
-            "                \"effectiveDate\": \"2019/08/22\",\n" +
-            "                \"introduction\": \"爆紅狗血韓劇!!!講述於15年前因殺人事件失去媽媽的財閥繼承女子，與只為金錢服務的邊緣三流律師相遇後，發現財閥家隱藏之祕密的故事。\",\n" +
-            "                \"duration\": \"60\",\n" +
-            "                \"newestEpisode\": \"15\",\n" +
-            "                \"totalEpisode\": 16,\n" +
-            "                \"fridayScore\": 4.8,\n" +
-            "                \"year\": 2019,\n" +
-            "                \"area\": \"韓國\",\n" +
-            "                \"paymentTagList\": [\n" +
-            "                    0,\n" +
-            "                    1\n" +
-            "                ],\n" +
-            "                \"propertyTagList\": [\n" +
-            "                    3\n" +
-            "                ],\n" +
-            "                \"isEmpty\": false,\n" +
-            "                \"largeImageUrl\": \"/HOTGROUP/WIDE/970/970_8771408.jpg\",\n" +
-            "                \"themeImageUrl\": \"/HOTGROUP/3TO2/970/970_8902698.jpg\",\n" +
-            "                \"imageUrl\": \"/DRAMA/970/970_8096184.jpg\",\n" +
-            "                \"url\": \"\",\n" +
-            "                \"rating\": 2\n" +
-            "            }";
-
+    public static final String KeyWord = "KeyWord";
+    public static final String Episode = "Episode";
+    public static final String LinkType = "linkType";
+    public static final String LinkValue = "linkValue";
     Button callfriDayAppBtn,callfriDayAppBtnPackageName;
-
+    int OVERLAY_PERMISSION_REQ_CODE = 999;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         callfriDayAppBtn = findViewById(R.id.CallfriDayAppBtn);
         callfriDayAppBtnPackageName  = findViewById(R.id.CallfriDayAppBtnPackageName);
-        Log.d(TAG,"JAON:"+Json);
         callfriDayAppBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setAction(callFriDayAction);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(POSTER,Json);
-                intent.putExtra(ACTION,ActionPlay);
+                intent.putExtra(KeyWord,"玩命關頭2");
+                intent.putExtra(LinkType,12);
+                intent.putExtra(LinkValue,2);
 //                startActivity(intent);
                 sendBroadcast(intent);
             }
@@ -70,15 +51,61 @@ public class MainActivity extends AppCompatActivity {
         callfriDayAppBtnPackageName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent activityIntent = new Intent();
-                activityIntent.setComponent(new ComponentName(callFriDayPackageName,callFriDayPackageName+callFriDayMainClass));
-                activityIntent.putExtra(POSTER,Json);
-                startActivity(activityIntent);
+                Intent intent = new Intent();
+                intent.setAction(callFriDayAction);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(KeyWord,"玩命關頭1");
+                intent.putExtra(LinkType,12);
+                intent.putExtra(LinkValue,2);
+//                startActivity(intent);
+                sendBroadcast(intent);
             }
         });
 
 
-        //目的就是啟動Service來開啟懸浮窗體
-        startService(new Intent(MainActivity.this, FloatService.class));
+        if(Build.VERSION.SDK_INT>=23)
+        {
+            if(Settings.canDrawOverlays(this))
+            {
+                //有悬浮窗权限开启服务绑定 绑定权限
+                //目的就是啟動Service來開啟懸浮窗體
+                startService(new Intent(MainActivity.this, FloatService.class));
+
+            }else{
+                //没有悬浮窗权限m,去开启悬浮窗权限
+                try{
+                    Intent  intent=new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                    startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        } else{
+            //默认有悬浮窗权限  但是 华为, 小米,oppo等手机会有自己的一套Android6.0以下  会有自己的一套悬浮窗权限管理 也需要做适配
+            //目的就是啟動Service來開啟懸浮窗體
+            startService(new Intent(MainActivity.this, FloatService.class));
+        }
+
+
     }
+
+    @SuppressLint("MissingSuperCall")
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
+            if(Build.VERSION.SDK_INT>=23) {
+                if (!Settings.canDrawOverlays(this)) {
+                    Toast.makeText(this, "权限授予失败，无法开启悬浮窗", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "权限授予成功！", Toast.LENGTH_SHORT).show();
+                    //有悬浮窗权限开启服务绑定 绑定权限
+                    //目的就是啟動Service來開啟懸浮窗體
+                    startService(new Intent(MainActivity.this, FloatService.class));
+                }
+            }
+        }
+    }
+
+
 }

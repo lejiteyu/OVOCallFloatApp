@@ -14,5 +14,11 @@ public class FloatService  extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        CustomViewManager.getInstance(this).onDestroy();
+    }
 }
 

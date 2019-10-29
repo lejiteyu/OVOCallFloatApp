@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="#559900"
-    android:layout_width="match_parent"
+    android:background="#3F51B5"
+    android:layout_width="300dp"
     android:layout_height="match_parent"
     android:padding="10dp">
     <TextView
@@ -10,12 +10,62 @@
         android:text="@string/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:textColor="#cccccc"
         />
     <Button
         android:layout_below="@id/title"
         android:id="@+id/btn1"
         android:text="open friDay app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_below="@id/btn1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn2"
+            android:text="open search Page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <EditText
+            android:id="@+id/edit_query"
+            android:layout_below="@+id/btn1"
+            android:text="笑話人生"
+            android:textColor="#cccccc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+    <Button
+        android:layout_below="@id/layout1"
+        android:id="@+id/btn5"
+        android:text="open DRAMA "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <Button
+        android:layout_below="@id/btn5"
+        android:id="@+id/btn3"
+        android:text="open Rank Page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <Button
+        android:layout_below="@id/btn3"
+        android:id="@+id/btn4"
+        android:text="open Anima Page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:layout_below="@id/btn4"
+        android:id="@+id/btn6"
+        android:text="open Anima "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />

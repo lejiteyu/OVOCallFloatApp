@@ -11,7 +11,7 @@ public class FloatView extends View {
     //懸浮球寬度
     public static int floatWidth = 300;
     //懸浮球高度
-    public static  int floatHeight = 250;
+    public static  int floatHeight = 500;
     //懸浮球畫筆
     private Paint mPaint;
     //繪製文字畫筆
