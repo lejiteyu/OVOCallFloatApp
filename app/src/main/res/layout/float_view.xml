@@ -15,7 +15,7 @@
     <Button
         android:layout_below="@id/title"
         android:id="@+id/btn1"
-        android:text="open friDay app"
+        android:text="play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -43,7 +43,7 @@
     <Button
         android:layout_below="@id/layout1"
         android:id="@+id/btn5"
-        android:text="open DRAMA "
+        android:text="play DRAMA "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -65,9 +65,37 @@
     <Button
         android:layout_below="@id/btn4"
         android:id="@+id/btn6"
-        android:text="open Anima "
+        android:text="play Anima "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
 
+    <Button
+        android:layout_below="@id/btn6"
+        android:id="@+id/btn7"
+        android:text="play  "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <Button
+    android:layout_below="@id/btn7"
+    android:id="@+id/btn8"
+    android:text="play  "
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    />
+    <Button
+        android:layout_below="@id/btn8"
+        android:id="@+id/btn9"
+        android:text="play  "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <ImageView
+        android:id="@+id/closeImg"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
 </RelativeLayout>

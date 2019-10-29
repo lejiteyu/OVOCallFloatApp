@@ -110,6 +110,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(new Intent(MainActivity.this, FloatService.class));
+        //stopService(new Intent(MainActivity.this, FloatService.class));
     }
 }
