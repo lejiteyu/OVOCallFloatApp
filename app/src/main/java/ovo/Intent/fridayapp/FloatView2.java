@@ -1,25 +1,57 @@
 package ovo.Intent.fridayapp;
 
+import android.app.Instrumentation;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class FloatView2  {
+import static ovo.Intent.fridayapp.MainActivity.SpeechRecognition;
 
-    Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9;
+public class FloatView2 implements View.OnTouchListener {
+    String TAG = FloatView2.class.getSimpleName();
+
+    Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,CallfriDayAppBtn;
     View view;
     EditText editText;
     ImageView closeImg;
+    TextView title;
+    ImageButton previousBtn,playPauseBtn,nextBtn,playNextBtn;
+
+
+
+
     public View getView(final Context context){
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.float_view, null);
+
+        title = (TextView)view.findViewById(R.id.title);
+        title.setFocusable(false);
+        title.setClickable(false);
+
+        CallfriDayAppBtn = (Button)view.findViewById(R.id.CallfriDayAppBtn);
+        CallfriDayAppBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = context.getPackageManager().getLaunchIntentForPackage(MainActivity.callFriDayPackageName);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity( intent );
+            }
+        });
+
         btn1 = (Button)view.findViewById(R.id.btn1);
         final String keyword1 = "激戰";
         String k = btn1.getText()+"("+keyword1+")";
@@ -179,13 +211,99 @@ public class FloatView2  {
                 Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.callFriDayAction);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_FROM_BACKGROUND);
                 intent.putExtra(MainActivity.KeyWord,keyword9);
                 intent.putExtra(MainActivity.Episode,Episode9);
                 intent.putExtra(MainActivity.LinkType,"");
                 intent.putExtra(MainActivity.LinkValue,"");
 //                startActivity(intent);
                 context.sendBroadcast(intent);
+            }
+        });
+
+
+        previousBtn = (ImageButton)view.findViewById(R.id.previousBtn);
+        playPauseBtn = (ImageButton)view.findViewById(R.id.playPauseBtn);
+        nextBtn = (ImageButton)view.findViewById(R.id.nextBtn);
+        playNextBtn = (ImageButton)view.findViewById(R.id.playNextBtn);
+        previousBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                        Instrumentation inst = new Instrumentation();
+                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                        }catch (Exception e){
+                            Log.e(TAG,""+e);
+                        }
+                    }
+                }).start();}catch (Exception e){
+
+                }
+            }
+        });
+        playPauseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Instrumentation inst = new Instrumentation();
+                            inst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                        }catch (Exception e){
+                            Log.e(TAG,""+e);
+                        }
+                    }
+                }).start();}catch (Exception e){
+
+                }
+
+            }
+        });
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                        Instrumentation inst = new Instrumentation();
+                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_NEXT);
+                        }catch (Exception e){
+                            Log.e(TAG,""+e);
+                        }
+                    }
+                }).start();}catch (Exception e){
+
+                }
+            }
+        });
+        playNextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                            Instrumentation inst = new Instrumentation();
+                            inst.sendKeyDownUpSync(KeyEvent.KEYCODE_NAVIGATE_NEXT);
+                            }catch (Exception e){
+                                Log.e(TAG,""+e);
+                            }
+                        }
+                    }).start();
+                }catch (Exception e){
+
+                }
             }
         });
 
@@ -207,5 +325,11 @@ public class FloatView2  {
             }
         });
         return view;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        Log.e(TAG,"Touch view:"+view);
+        return false;
     }
 }

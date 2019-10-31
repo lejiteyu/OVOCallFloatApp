@@ -16,23 +16,148 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/CallfriDayAppBtn"
+    <ScrollView
         android:layout_below="@+id/title"
-        android:text="打開friDay app"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/CallfriDayAppBtn"
+                android:text="打開friDay app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                />
 
-    <Button
-        android:id="@+id/CallfriDayAppBtnPackageName"
-        android:layout_below="@+id/CallfriDayAppBtn"
-        android:text="打開friDay app by packageName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        />
+            <Button
+                android:id="@+id/CallfriDayAppBtnPackageName"
+                android:layout_below="@+id/CallfriDayAppBtn"
+                android:text="打開friDay app by packageName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                />
+
+
+            <Button
+                android:layout_below="@id/CallfriDayAppBtnPackageName"
+                android:id="@+id/btn1"
+                android:text="play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_below="@id/btn1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn2"
+                    android:text="open search Page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <EditText
+                    android:id="@+id/edit_query"
+                    android:layout_below="@+id/btn1"
+                    android:text="笑話人生"
+                    android:textColor="#cccccc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+            <Button
+                android:layout_below="@id/layout1"
+                android:id="@+id/btn5"
+                android:text="play DRAMA "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <Button
+                android:layout_below="@id/btn5"
+                android:id="@+id/btn3"
+                android:text="open Rank Page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <Button
+                android:layout_below="@id/btn3"
+                android:id="@+id/btn4"
+                android:text="open Anima Page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <Button
+                android:layout_below="@id/btn4"
+                android:id="@+id/btn6"
+                android:text="play Anima "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <Button
+                android:layout_below="@id/btn6"
+                android:id="@+id/btn7"
+                android:text="play  "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <Button
+                android:layout_below="@id/btn7"
+                android:id="@+id/btn8"
+                android:text="play  "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <Button
+                android:layout_below="@id/btn8"
+                android:id="@+id/btn9"
+                android:text="play  "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <LinearLayout
+                android:layout_below="@id/btn9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/previousBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_media_rew"
+                    tools:src="@android:drawable/ic_media_rew" />
+                <ImageButton
+                    android:src="@android:drawable/ic_media_play"
+                    android:id="@+id/playPauseBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <ImageButton
+                    android:id="@+id/nextBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_media_ff"
+                    tools:src="@android:drawable/ic_media_ff" />
+                <ImageButton
+                    android:id="@+id/playNextBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_media_next"
+                    tools:src="@android:drawable/ic_media_next" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+    <ImageView
+        android:id="@+id/closeImg"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
 
 </RelativeLayout>

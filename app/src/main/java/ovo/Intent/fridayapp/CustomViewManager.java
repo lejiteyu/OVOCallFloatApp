@@ -4,8 +4,12 @@ package ovo.Intent.fridayapp;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -15,15 +19,20 @@ import android.widget.Toast;
  * 懸浮窗體管理工具類
  */
 public class CustomViewManager {
+    String TAG = CustomViewManager.class.getSimpleName();
     //上下文
     private Context mContext;
     //本類例項
     private static CustomViewManager instance;
     //自定義的FloatView
     private View mFloatView;
+    //懸浮球寬度
+    public static int floatWidth = 400;
+    //懸浮球高度
+    public static  int floatHeight = 800;
     //視窗管理類
     private WindowManager mWindowManager;
-
+    WindowManager.LayoutParams parmas;
 //    public static final String Json = "{" +
 //            "                \"contentId\": 42554,\n" +
 //            "                \"contentType\": 1,\n" +
@@ -52,10 +61,17 @@ public class CustomViewManager {
 //            "                \"rating\": 2\n" +
 //            "            }";
 
+
+    private float mTouchStartX;
+    private float mTouchStartY;
+    private float x;
+    private float y;
+
     private CustomViewManager(Context context) {
         this.mContext = context;
         mFloatView = getFloatView2(mContext);
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+
         mFloatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,14 +79,59 @@ public class CustomViewManager {
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.callFriDayAction);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(MainActivity.KeyWord,"鬼滅之刃");
-                intent.putExtra(MainActivity.LinkType,12);
-                intent.putExtra(MainActivity.LinkValue,2);
+                intent.putExtra(MainActivity.KeyWord,"");
+                intent.putExtra(MainActivity.LinkType,"");
+                intent.putExtra(MainActivity.LinkValue,"");
 //                startActivity(intent);
                 mContext.sendBroadcast(intent);
             }
         });
+
+        mFloatView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                return false;
+            }
+        });
+
+        mFloatView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                Log.d(TAG,"motionEvent:"+event);
+                x = event.getRawX();
+                y = event.getRawY()-50;   //25是系统状态栏的高度
+                Log.i("currP", "currX:"+x+"====currY:"+y);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        //获取相对View的坐标，即以此View左上角为原点
+                        mTouchStartX =  event.getX();
+                        mTouchStartY =  event.getY();
+                        Log.i("startP", "startX"+mTouchStartX+"====startY"+mTouchStartY);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        updateViewPosition();
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        updateViewPosition();
+                        mTouchStartX=mTouchStartY=0;
+                        break;
+                }
+                return true;
+            }
+        });
     }
+
+    private void updateViewPosition(){
+        //更新浮动窗口位置参数
+        parmas.x=(int)( x-mTouchStartX);
+        parmas.y=(int) (y-mTouchStartY);
+        Log.i("updateViewPosition", "parmas.x:"+parmas.x+"====parmas.y:"+parmas.y);
+        mWindowManager.updateViewLayout(mFloatView, parmas);
+
+    }
+
+
 
     private View getFloatView2(Context context){
         return new FloatView2().getView(context);
@@ -103,17 +164,24 @@ public class CustomViewManager {
      * @time 2016/8/17 13:47
      */
     public void showFloatViewOnWindow() {
-        WindowManager.LayoutParams parmas = new WindowManager.LayoutParams();
-        parmas.width = FloatView.floatWidth;
-        parmas.height = FloatView.floatHeight;
+        parmas = new WindowManager.LayoutParams();
+        floatWidth = mWindowManager.getDefaultDisplay().getWidth()/2;
+        floatHeight = mWindowManager.getDefaultDisplay().getHeight()/2;
+        parmas.width = floatWidth;
+        parmas.height = floatHeight;
 //視窗圖案放置位置
         parmas.gravity = Gravity.LEFT | Gravity.CENTER;
 // 如果忽略gravity屬性，那麼它表示視窗的絕對X位置。
-        parmas.x = mWindowManager.getDefaultDisplay().getWidth()-FloatView.floatWidth;
+        parmas.x = mWindowManager.getDefaultDisplay().getWidth()-floatWidth;
 //如果忽略gravity屬性，那麼它表示視窗的絕對Y位置。
         parmas.y = 0;
 ////電話視窗。它用於電話互動（特別是呼入）。它置於所有應用程式之上，狀態列之下。
         parmas.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            parmas.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            parmas.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }
 //FLAG_NOT_FOCUSABLE讓window不能獲得焦點，這樣使用者快就不能向該window傳送按鍵事件及按鈕事件
 //FLAG_NOT_TOUCH_MODAL即使在該window在可獲得焦點情況下，仍然把該window之外的任何event傳送到該window之後的其他window.
         parmas.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;

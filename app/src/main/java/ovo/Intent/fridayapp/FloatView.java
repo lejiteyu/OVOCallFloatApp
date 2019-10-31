@@ -8,10 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class FloatView extends View {
-    //懸浮球寬度
-    public static int floatWidth = 300;
-    //懸浮球高度
-    public static  int floatHeight = 500;
+
     //懸浮球畫筆
     private Paint mPaint;
     //繪製文字畫筆
@@ -22,10 +19,10 @@ public class FloatView extends View {
         initPaint();
     }
     public int getFloatWidth() {
-        return floatWidth;
+        return CustomViewManager.floatWidth;
     }
     public int getFloatHeight() {
-        return floatHeight;
+        return CustomViewManager.floatHeight;
     }
     public FloatView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -57,7 +54,7 @@ public class FloatView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //設定大小
-        setMeasuredDimension(floatWidth, floatHeight);
+        setMeasuredDimension(CustomViewManager.floatWidth, CustomViewManager.floatHeight);
     }
     /**
      * @param
@@ -69,14 +66,14 @@ public class FloatView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 //繪製懸浮球
-        canvas.drawCircle(floatWidth / 2, floatHeight / 2, floatWidth / 2, mPaint);
+        canvas.drawCircle(CustomViewManager.floatWidth / 2, CustomViewManager.floatHeight / 2, CustomViewManager.floatWidth / 2, mPaint);
 //繪製文字
         Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
 //文字大小計算可以參考：http://mikewang.blog.51cto.com/3826268/871765/
         float textWidth = mTextPaint.measureText(text);
-        float x = floatWidth / 2 - textWidth / 2;
+        float x = CustomViewManager.floatWidth / 2 - textWidth / 2;
         float dy = (metrics.descent - metrics.ascent) / 2;
-        float y = floatHeight / 2  - dy;
+        float y = CustomViewManager.floatHeight / 2  - dy;
         canvas.drawText(text, x, y, mTextPaint);
     }
 }
