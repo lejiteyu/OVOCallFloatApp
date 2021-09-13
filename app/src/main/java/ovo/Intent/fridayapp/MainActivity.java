@@ -20,6 +20,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * https://www.jianshu.com/p/529755edc3c5
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SpeechRecognition = "SpeechRecognition";
     Button callfriDayAppBtn,callfriDayAppBtnPackageName;
     int OVERLAY_PERMISSION_REQ_CODE = 999;
-
+    final int FLAG_RECEIVER_INCLUDE_BACKGROUND = 0x01000000;
     Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9;
     EditText editText;
     ImageButton previousBtn,playPauseBtn,nextBtn,playNextBtn;
@@ -67,18 +70,32 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity( intent );
 
                 //App 執行
-                Intent intent = getPackageManager().getLaunchIntentForPackage(callFriDayPackageName);
-                if( intent != null )
-                {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(SpeechRecognition, true);
-                    intent.putExtra(MainActivity.KeyWord, "激戰");
-                    intent.putExtra(MainActivity.Episode, "");
-                    intent.putExtra(MainActivity.LinkType, "");
-                    intent.putExtra(MainActivity.LinkValue, "");
-                    startActivity( intent );
+//                Intent intent = getPackageManager().getLaunchIntentForPackage(callFriDayPackageName);
+//                if( intent != null )
+//                {
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra(SpeechRecognition, true);
+//                    intent.putExtra(MainActivity.KeyWord, "人妻");
+//                    intent.putExtra(MainActivity.Episode, "");
+//                    intent.putExtra(MainActivity.LinkType, "");
+//                    intent.putExtra(MainActivity.LinkValue, "");
+//                    startActivity( intent );
+//                }
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("contentId","1669");
+                    json.put("contentType","3");
+                    json.put("isLive",false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
+                Intent intent = getPackageManager().getLaunchIntentForPackage(callFriDayPackageName);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("poster", json.toString());
+                startActivity( intent );
+                Log.d(TAG,"poster:"+json);
                 //開啟 App 的 Google Play
 //                Uri uri = Uri.parse( "market://details?id=" + callFriDayPackageName );
 //                Intent intent = new Intent( Intent.ACTION_VIEW, uri );
@@ -90,14 +107,31 @@ public class MainActivity extends AppCompatActivity {
         callfriDayAppBtnPackageName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setAction(callFriDayAction);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(KeyWord,"激戰");
-                intent.putExtra(LinkType,"");
-                intent.putExtra(LinkValue,"");
-//                startActivity(intent);
-                sendBroadcast(intent);
+//                Intent intent = new Intent();
+//                intent.setAction(callFriDayAction);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra(KeyWord,"激戰");
+//                intent.putExtra(LinkType,"");
+//                intent.putExtra(LinkValue,"");
+////                startActivity(intent);
+//                sendBroadcast(intent);
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("contentId","2810");
+                    json.put("contentType","0");
+                    json.put("streamingId",17);
+                    json.put("isLive",true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Intent intent = getPackageManager().getLaunchIntentForPackage(callFriDayPackageName);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("poster", json.toString());
+                //android Oreo Recommendation go to Detail Page
+                intent.setAction(String.valueOf(55569));
+                startActivity( intent );
             }
         });
 
@@ -132,12 +166,14 @@ public class MainActivity extends AppCompatActivity {
         String k = btn1.getText()+"("+keyword1+")";
         btn1.setText(k);
         btn1.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
                 Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.callFriDayAction);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(FLAG_RECEIVER_INCLUDE_BACKGROUND);//20210913 sdk > 8.0 要喚起背景app 需要使用
                 intent.putExtra(MainActivity.KeyWord,keyword1);
                 intent.putExtra(MainActivity.LinkType,"");
                 intent.putExtra(MainActivity.LinkValue,"");
@@ -147,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
         });
         btn2 = (Button)findViewById(R.id.btn2);
         btn2.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
                 String keyword = editText.getText().toString();
@@ -154,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.callFriDayAction);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(FLAG_RECEIVER_INCLUDE_BACKGROUND);//20210913 sdk > 8.0 要喚起背景app 需要使用
                 intent.putExtra(MainActivity.KeyWord,keyword);
                 intent.putExtra(MainActivity.LinkType,"12");
                 intent.putExtra(MainActivity.LinkValue,"5");
@@ -163,12 +201,14 @@ public class MainActivity extends AppCompatActivity {
         });
         btn3 = (Button)findViewById(R.id.btn3);
         btn3.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
                 Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.callFriDayAction);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(FLAG_RECEIVER_INCLUDE_BACKGROUND);//20210913 sdk > 8.0 要喚起背景app 需要使用
                 intent.putExtra(MainActivity.KeyWord,"");
                 intent.putExtra(MainActivity.LinkType,"12");
                 intent.putExtra(MainActivity.LinkValue,"2");
@@ -178,12 +218,14 @@ public class MainActivity extends AppCompatActivity {
         });
         btn4 = (Button)findViewById(R.id.btn4);
         btn4.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
                 Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.callFriDayAction);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(FLAG_RECEIVER_INCLUDE_BACKGROUND);//20210913 sdk > 8.0 要喚起背景app 需要使用
                 intent.putExtra(MainActivity.KeyWord,"");
                 intent.putExtra(MainActivity.LinkType,"12");
                 intent.putExtra(MainActivity.LinkValue,"4_3");
