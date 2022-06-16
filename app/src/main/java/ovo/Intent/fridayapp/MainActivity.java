@@ -23,10 +23,14 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
+
 
 /**
  * https://www.jianshu.com/p/529755edc3c5
  * https://tomkuo139.blogspot.com/2017/03/android-package-name-app-google-play.html
+ * https://fridaystaging.page.link/?link=https://staging3.video.friday.tw/?linkType%3D12%26linkValue%3D1%26src%3DmWeb&apn=net.fetnet.fetvod.staging&isi=1027671676&ibi=tw.friday.video.iphone.uat&efr=1
+ * http://video.friday.tw/home/?linkTyep=1669&linkeValue=1
  */
 public class MainActivity extends AppCompatActivity {
      final String TAG = MainActivity.class.getSimpleName();
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     Button callfriDayAppBtn,callfriDayAppBtnPackageName;
     int OVERLAY_PERMISSION_REQ_CODE = 999;
     final int FLAG_RECEIVER_INCLUDE_BACKGROUND = 0x01000000;
-    Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9;
+    Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn10;
     EditText editText;
     ImageButton previousBtn,playPauseBtn,nextBtn,playNextBtn;
 
@@ -170,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent();
+                Intent intent = getPackageManager().getLaunchIntentForPackage(callFriDayPackageName);
                 intent.setAction(MainActivity.callFriDayAction);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(FLAG_RECEIVER_INCLUDE_BACKGROUND);//20210913 sdk > 8.0 要喚起背景app 需要使用
@@ -195,6 +199,9 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(MainActivity.KeyWord,keyword);
                 intent.putExtra(MainActivity.LinkType,"12");
                 intent.putExtra(MainActivity.LinkValue,"5");
+
+//                intent.putExtra(MainActivity.LinkType,"10");//進入詳細頁
+//                intent.putExtra(MainActivity.LinkValue,"52045_1”);//contnetId_contentType
 //                startActivity(intent);
                 context.sendBroadcast(intent);
             }
@@ -242,15 +249,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent();
+//                intent.setAction(MainActivity.callFriDayAction);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra(MainActivity.Episode,Episode5);
+//                intent.putExtra(MainActivity.KeyWord,keyword5);
+//                intent.putExtra(MainActivity.LinkType,"");
+//                intent.putExtra(MainActivity.LinkValue,"");
+////                startActivity(intent);
+//                context.sendBroadcast(intent);
+
+                String  url = "http://video.friday.tw/home/?linkType=10&linkValue=80224_1";
                 Intent intent = new Intent();
-                intent.setAction(MainActivity.callFriDayAction);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(MainActivity.Episode,Episode5);
-                intent.putExtra(MainActivity.KeyWord,keyword5);
-                intent.putExtra(MainActivity.LinkType,"");
-                intent.putExtra(MainActivity.LinkValue,"");
-//                startActivity(intent);
-                context.sendBroadcast(intent);
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+
             }
         });
 
@@ -335,6 +349,23 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(MainActivity.LinkValue,"");
 //                startActivity(intent);
                 context.sendBroadcast(intent);
+            }
+        });
+
+        btn10 = (Button)findViewById(R.id.btn10);
+        final String keyword10 = "收藏頁面";
+        final String Episode10 = "";
+        String k10 = btn10.getText()+"("+keyword10+":"+Episode10+")";
+        btn10.setText(k10);
+        btn10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
+                String  url = "http://video.friday.tw/home/?linkType=15&linkValue=5";
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
             }
         });
 
