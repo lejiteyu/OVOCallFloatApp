@@ -31,6 +31,7 @@ import java.net.URISyntaxException;
  * https://tomkuo139.blogspot.com/2017/03/android-package-name-app-google-play.html
  * https://fridaystaging.page.link/?link=https://staging3.video.friday.tw/?linkType%3D12%26linkValue%3D1%26src%3DmWeb&apn=net.fetnet.fetvod.staging&isi=1027671676&ibi=tw.friday.video.iphone.uat&efr=1
  * http://video.friday.tw/home/?linkTyep=1669&linkeValue=1
+ * adb shell am start -a android.intent.action.VIEW -d "friday://video.friday.tw/home/?linkType=10&linkValue=4117_2&autoPlay=2"
  */
 public class MainActivity extends AppCompatActivity {
      final String TAG = MainActivity.class.getSimpleName();
@@ -174,15 +175,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context,"the float btn1 is clicked.",Toast.LENGTH_LONG).show();
-                Intent intent = getPackageManager().getLaunchIntentForPackage(callFriDayPackageName);
-                intent.setAction(MainActivity.callFriDayAction);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(FLAG_RECEIVER_INCLUDE_BACKGROUND);//20210913 sdk > 8.0 要喚起背景app 需要使用
-                intent.putExtra(MainActivity.KeyWord,keyword1);
-                intent.putExtra(MainActivity.LinkType,"");
-                intent.putExtra(MainActivity.LinkValue,"");
-//                startActivity(intent);
-                context.sendBroadcast(intent);
+                String  url = "friday://video.friday.tw/home/?linkType=10&linkValue=4117_2&autoPlay=2";
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
             }
         });
         btn2 = (Button)findViewById(R.id.btn2);

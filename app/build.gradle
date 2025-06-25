@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace = "ovo.Intent.fridayapp"
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
     defaultConfig {
         applicationId "ovo.Intent.fridayapp"
         minSdkVersion 17
-        targetSdkVersion 29
+        targetSdk 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
